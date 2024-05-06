@@ -3,44 +3,71 @@ const counterElement = document.getElementById('counter');
 const plusButton = document.getElementById('plus');
 const minusButton = document.getElementById('minus');
 const resetButton = document.getElementById('reset');
-const freeShippingSpan = document.getElementById('freeShipping');
-const outOfStockSpan = document.getElementById('outOfStock');
 
 // Setting initial count value
 let count = 0;
 
-// Function to update the counter value
+// Creating and appending  the free shipping message
+function createFreeShippingMessage() {
+    const shippingMessage = document.createElement('div');
+    shippingMessage.id = 'shippingMessage';
+    shippingMessage.className = 'message';
+    shippingMessage.textContent = 'You have free shipping';
+    document.querySelector('.inner-container').insertBefore(shippingMessage, document.querySelector('.buttons'));
+}
+
+// Updating the counter value
 function updateCounter() {
     counterElement.textContent = count;
 
+// Showing or hiding the free shipping message based on the count
+const shippingMessage = document.getElementById('shippingMessage');
+    if (count >= 10 && count <= 19) {
+        if (!shippingMessage) {
+            createFreeShippingMessage();
+        } else {
+            shippingMessage.style.display = 'block';
+        }
+    } else {
+        if (shippingMessage) {
+            shippingMessage.style.display = 'none';
+        }
+    }
+
+// Showing or hiding the out of stock message based on the count
+const outOfStockMessage = document.getElementById('outOfStock');
+    if (count >= 20) {
+        plusButton.style.backgroundColor = 'red';
+        if (!outOfStockMessage) {
+            createOutOfStockMessage();
+        } else {
+            outOfStockMessage.style.display = 'block';
+        }
+    } else {
+        plusButton.style.backgroundColor = ''; // Reset background color
+        if (outOfStockMessage) {
+            outOfStockMessage.style.display = 'none';
+        }
+    }
+
 // Hiding the minus button when count is 0
-if (count === 0) {
-    minusButton.style.display = 'none';
-} else {
-    minusButton.style.display = 'inline-block'; 
+    if (count === 0) {
+        minusButton.style.display = 'none';
+    } else {
+        minusButton.style.display = 'inline-block';
+    }
 }
 
-
-// Showing the free shipping span if count is between 10 and 19
-if (count >= 10 && count <= 19) {
-    freeShippingSpan.style.display = 'block';
-} else {
-    freeShippingSpan.style.display = 'none';
+// Creating and appending the out of stock message
+function createOutOfStockMessage() {
+    const outOfStockMessage = document.createElement('div');
+    outOfStockMessage.id = 'outOfStock';
+    outOfStockMessage.className = 'message';
+    outOfStockMessage.textContent = 'Out of stock';
+    document.querySelector('.inner-container').insertBefore(outOfStockMessage, document.querySelector('.buttons'));
 }
 
-
- // Changing plus button background to red and showing out of stock span if count is 20 or above
- if (count >= 20) {
-    plusButton.style.backgroundColor = 'red';
-    outOfStockSpan.style.display = 'block';
-} else {
-    plusButton.style.backgroundColor = ''; // Reset background color
-    outOfStockSpan.style.display = 'none';
-}
-}
-
-
-// Function to handle button clicks
+// Handling button clicks
 function handleButtonClick(action) {
     if (action === 'increment') {
         count++;
@@ -59,4 +86,3 @@ resetButton.addEventListener('click', () => handleButtonClick('reset'));
 
 // Initializing the counter
 updateCounter();
-
